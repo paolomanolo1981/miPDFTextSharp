@@ -19,12 +19,20 @@ namespace WebAppPDF
 {
     public class HeaderEventHandler : IEventHandler
     {
-        Image Img; 
+        Image Img;
+        protected Document doc;
+
+        public HeaderEventHandler(Document _doc)
+        {
+            this.doc = _doc;
+        }
 
         public HeaderEventHandler(Image img)
         {
             Img = img;
         }
+
+
 
         public void HandleEvent(Event @event)
         {
@@ -85,5 +93,33 @@ namespace WebAppPDF
             return tableEvent;
         }
 
+        public void HandleEventOK(Event @event)
+        {
+            PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
+            Rectangle pageSize = docEvent.GetPage().GetPageSize();
+
+            float a = pageSize.GetLeft();
+            float b = pageSize.GetRight();
+            float c = doc.GetLeftMargin();
+            float d = doc.GetRightMargin();
+
+            PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_OBLIQUE);
+
+            float coordenadaX = ((a + c) + (b + d)) / 2;
+            float headerY = pageSize.GetTop() - doc.GetTopMargin() + 10;
+            float footerY = doc.GetBottomMargin();
+            Canvas canvas = new Canvas(docEvent.GetPage(), pageSize);
+            canvas
+                .SetFont(font)
+                .SetFontSize(12)
+                .ShowTextAligned("Este es el encabezado de pagina", coordenadaX, headerY, TextAlignment.CENTER)
+                .ShowTextAligned("Esto es el pie de pagina",coordenadaX,footerY,TextAlignment.CENTER)
+                .ShowTextAligned("texto agregado",612,0,TextAlignment.RIGHT)
+                .Close()
+                ;
+
+
+
+        }
     }
 }

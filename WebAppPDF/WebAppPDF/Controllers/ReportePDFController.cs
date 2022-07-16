@@ -43,7 +43,7 @@ namespace WebAppPDF.Controllers
             //evento
             pdfDocument.AddEventHandler(PdfDocumentEvent.START_PAGE, new HeaderEventHandler(img));
             pdfDocument.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
-
+            pdfDocument.AddEventHandler(PdfDocumentEvent.START_PAGE, new BackgroundColorHandler());
 
             PdfFont font = PdfFontFactory.CreateFont(nameFont);// StandardFonts.HELVETICA);
 
@@ -106,7 +106,7 @@ namespace WebAppPDF.Controllers
             //evento
             pdfDocument.AddEventHandler(PdfDocumentEvent.START_PAGE, new HeaderEventHandler(img));
             pdfDocument.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
-
+            pdfDocument.AddEventHandler(PdfDocumentEvent.END_PAGE, new BackgroundColorHandler());
             //tabla 1 para la cabecera
             Table table = new Table(1).UseAllAvailableWidth();
             Cell cell = new Cell().Add(new Paragraph("Reporte de Productos").SetFontSize(14))
